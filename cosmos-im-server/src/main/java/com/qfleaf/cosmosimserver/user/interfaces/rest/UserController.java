@@ -3,11 +3,11 @@ package com.qfleaf.cosmosimserver.user.interfaces.rest;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
 import com.qfleaf.cosmosimserver.shared.web.ApiResponse;
-import com.qfleaf.cosmosimserver.user.application.commands.RegisterByAccountCommand;
+import com.qfleaf.cosmosimserver.user.application.commands.ChangePasswordCommand;
 import com.qfleaf.cosmosimserver.user.application.queries.UserQueryService;
-import com.qfleaf.cosmosimserver.user.application.services.UserAuthAppService;
+import com.qfleaf.cosmosimserver.user.application.services.UserOpsService;
 import com.qfleaf.cosmosimserver.user.infrastructure.dto.UserDetailDTO;
-import com.qfleaf.cosmosimserver.user.interfaces.rest.request.RegisterRequest;
+import com.qfleaf.cosmosimserver.user.interfaces.rest.request.PasswordChangeRequest;
 import com.qfleaf.cosmosimserver.user.interfaces.rest.response.UserDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
     private final UserQueryService queryService;
+    private final UserOpsService opsService;
 
     @GetMapping("/{userId}")
     @SaCheckLogin
@@ -33,5 +34,13 @@ public class UserController {
         long loginId = StpUtil.getLoginIdAsLong();
         UserDetailDTO userDetail = queryService.getUserDetail(loginId);
         return ApiResponse.success(userDetail.toVO());
+    }
+
+    @PostMapping("/changePassword")
+    public ApiResponse<Void> changePassword(@RequestBody PasswordChangeRequest request) {
+        opsService.changePassword(
+                new ChangePasswordCommand(request.getOriginalPassword(), request.getNewPassword())
+        );
+        return ApiResponse.success();
     }
 }

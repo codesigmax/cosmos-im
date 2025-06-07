@@ -22,6 +22,10 @@ public class UserDomainService {
         );
     }
 
+    public void saveUser(UserAggregate user) {
+        userRepository.save(user);
+    }
+
     public UserAggregate getUser(String account) {
         return userRepository.findUserByAccount(account);
     }

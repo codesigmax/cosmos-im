@@ -10,4 +10,6 @@ public interface UserRepository {
     void checkUsername(String username);
 
     UserAggregate findUserById(Long userId);
+
+    UserAggregate save(UserAggregate user);
 }

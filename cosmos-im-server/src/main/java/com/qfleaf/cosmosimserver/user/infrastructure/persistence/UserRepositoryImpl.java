@@ -32,7 +32,7 @@ public class UserRepositoryImpl implements UserRepository {
         );
         UserEntity entity = user.toEntity();
         int insert = writeRepo.insert(entity);
-        log.info("save user entity: {}, effect rows: {} ", entity, insert);
+        log.info("insert user entity: {}, effect rows: {} ", entity, insert);
         // todo 记录日志
         // todo 发布事件
         return user;
@@ -57,5 +57,13 @@ public class UserRepositoryImpl implements UserRepository {
         return readRepo.findDetailById(userId)
                 .map(entity -> new UserAggregate(entity, passwordEncoder))
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    @Override
+    public UserAggregate save(UserAggregate user) {
+        UserEntity entity = user.toEntity();
+        int update = writeRepo.update(entity);
+        log.info("update user entity: {}, effect rows: {}", entity, update);
+        return user;
     }
 }
