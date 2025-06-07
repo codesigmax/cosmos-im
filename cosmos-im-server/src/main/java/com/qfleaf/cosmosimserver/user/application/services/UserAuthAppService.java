@@ -7,9 +7,11 @@ import com.qfleaf.cosmosimserver.user.application.commands.RegisterByAccountComm
 import com.qfleaf.cosmosimserver.user.domain.aggregates.UserAggregate;
 import com.qfleaf.cosmosimserver.user.domain.services.UserDomainService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserAuthAppService {
@@ -31,6 +33,8 @@ public class UserAuthAppService {
                 command.nickname(),
                 command.avatar()
         );
+        // 3. 记录日志
+        log.info("user register by account: {}", user);
     }
 
     public SaTokenInfo loginByAccount(LoginByAccountCommand command) {
