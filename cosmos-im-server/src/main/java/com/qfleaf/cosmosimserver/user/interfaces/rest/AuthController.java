@@ -4,7 +4,7 @@ import cn.dev33.satoken.stp.SaTokenInfo;
 import com.qfleaf.cosmosimserver.shared.web.ApiResponse;
 import com.qfleaf.cosmosimserver.user.application.commands.LoginByAccountCommand;
 import com.qfleaf.cosmosimserver.user.application.commands.RegisterByAccountCommand;
-import com.qfleaf.cosmosimserver.user.application.services.UserAuthAppService;
+import com.qfleaf.cosmosimserver.user.application.services.UserAuthService;
 import com.qfleaf.cosmosimserver.user.interfaces.rest.request.LoginRequest;
 import com.qfleaf.cosmosimserver.user.interfaces.rest.request.RegisterRequest;
 import com.qfleaf.cosmosimserver.user.interfaces.rest.response.LoginResponse;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RequiredArgsConstructor
 public class AuthController {
-    private final UserAuthAppService authService;
+    private final UserAuthService authService;
 
     @PostMapping("/register")
     public ApiResponse<Void> register(@RequestBody RegisterRequest request) {

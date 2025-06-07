@@ -1,7 +1,7 @@
 package com.qfleaf.cosmosimserver.user.interfaces.rest;
 
 import com.qfleaf.cosmosimserver.user.application.commands.RegisterByAccountCommand;
-import com.qfleaf.cosmosimserver.user.application.services.UserAuthAppService;
+import com.qfleaf.cosmosimserver.user.application.services.UserAuthService;
 import com.qfleaf.cosmosimserver.user.interfaces.rest.request.RegisterRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class AuthControllerTest {
     private ObjectMapper objectMapper; // 用于JSON序列化
 
     @MockBean
-    private UserAuthAppService authService; // 模拟Service
+    private UserAuthService authService; // 模拟Service
 
     @Test
     public void testRegisterSuccess() throws Exception {

@@ -9,6 +9,7 @@ import com.qfleaf.cosmosimserver.user.domain.repositories.UserRepository;
 import com.qfleaf.cosmosimserver.user.domain.repositories.UserWriteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 @Slf4j
@@ -17,9 +18,18 @@ import org.springframework.stereotype.Repository;
 public class UserRepositoryImpl implements UserRepository {
     private final UserWriteRepository writeRepo;
     private final UserReadRepository readRepo;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserAggregate save(UserAggregate user) {
+    public UserAggregate save(String username, String rawPassword, String email, String nickname, String avatar) {
+        UserAggregate user = UserAggregate.createUser(
+                username,
+                rawPassword,
+                email,
+                nickname,
+                avatar,
+                passwordEncoder
+        );
         UserEntity entity = user.toEntity();
         int insert = writeRepo.insert(entity);
         log.info("save user entity: {}, effect rows: {} ", entity, insert);
@@ -31,7 +41,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public UserAggregate findUserByAccount(String account) {
         return readRepo.findUserByAccount(account)
-                .map(UserAggregate::new)
+                .map(entity -> new UserAggregate(entity, passwordEncoder))
                 .orElseThrow(UserNotFoundException::new);
     }
 
@@ -40,5 +50,12 @@ public class UserRepositoryImpl implements UserRepository {
         readRepo.findUserByAccount(username).ifPresent(user -> {
             throw new InvalidArgsException("用户名不可用：" + username);
         });
+    }
+
+    @Override
+    public UserAggregate findUserById(Long userId) {
+        return readRepo.findDetailById(userId)
+                .map(entity -> new UserAggregate(entity, passwordEncoder))
+                .orElseThrow(UserNotFoundException::new);
     }
 }

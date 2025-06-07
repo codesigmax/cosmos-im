@@ -8,13 +8,13 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UserAuthAppServiceTest {
+class UserAuthServiceTest {
 
     @Mock
     private UserDomainService userDomainService;
 
     @InjectMocks
-    private UserAuthAppService userAuthAppService;
+    private UserAuthService userAuthService;
 
     @Test
     void registerByAccount() {
@@ -25,6 +25,6 @@ class UserAuthAppServiceTest {
                 "测试",
                 null
         );
-        userAuthAppService.registerByAccount(command);
+        userAuthService.registerByAccount(command);
     }
 }

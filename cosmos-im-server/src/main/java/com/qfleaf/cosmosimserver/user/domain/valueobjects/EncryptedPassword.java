@@ -1,7 +1,6 @@
 package com.qfleaf.cosmosimserver.user.domain.valueobjects;
 
 import lombok.Getter;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 
 @Getter
@@ -17,9 +16,5 @@ public class EncryptedPassword {
             throw new IllegalArgumentException("密码长度至少为8位");
         }
         this.value = encryptedValue;
-    }
-
-    public boolean matches(String rawPassword, PasswordEncoder encoder) {
-        return encoder.matches(rawPassword, value);
     }
 }

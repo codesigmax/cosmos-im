@@ -35,10 +35,13 @@ public class UserAggregate extends BaseAggregateRoot {
     private Instant createdAt;
     private Instant updatedAt;
 
-    private UserAggregate() {
+    private final PasswordEncoder passwordEncoder;
+
+    private UserAggregate(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public UserAggregate(UserEntity entity) {
+    public UserAggregate(UserEntity entity, PasswordEncoder passwordEncoder) {
         userId = new UserId(entity.getId());
         username = new Username(entity.getUsername());
         password = new EncryptedPassword(entity.getPassword());
@@ -48,14 +51,19 @@ public class UserAggregate extends BaseAggregateRoot {
         status = entity.getStatus();
         createdAt = entity.getCreatedAt();
         updatedAt = entity.getUpdatedAt();
+        this.passwordEncoder = passwordEncoder;
     }
 
     // 领域行为方法
-    public void changePassword(String original, String newPassword, PasswordEncoder encoder) {
-        if (!this.password.matches(original, encoder)) {
-            throw new PasswordMismatchException();
+    public void matchesPassword(String rawPassword, String errorMsg) {
+        if (!passwordEncoder.matches(rawPassword, password.getValue())) {
+            throw new PasswordMismatchException(errorMsg);
         }
-        this.password = new EncryptedPassword(encoder.encode(newPassword));
+    }
+
+    public void changePassword(String original, String newPassword) {
+        matchesPassword(original, "原密码不匹配");
+        this.password = new EncryptedPassword(passwordEncoder.encode(newPassword));
         registerEvent(new UserPasswordChangedEvent(userId));
     }
 
@@ -73,7 +81,7 @@ public class UserAggregate extends BaseAggregateRoot {
             String nickname,
             String avatar,
             PasswordEncoder encoder) {
-        UserAggregate user = new UserAggregate();
+        UserAggregate user = new UserAggregate(encoder);
         user.userId = UserId.newId();
         user.username = new Username(username);
         user.password = new EncryptedPassword(encoder.encode(plainPassword));

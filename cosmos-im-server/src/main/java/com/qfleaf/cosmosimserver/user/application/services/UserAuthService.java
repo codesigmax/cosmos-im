@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserAuthAppService {
+public class UserAuthService {
     private final UserDomainService domainService;
 //    private final EmailClient emailClient; todo集成邮箱
 
@@ -26,7 +26,7 @@ public class UserAuthAppService {
 //        }
 
         // 2. 执行领域逻辑
-        UserAggregate user = domainService.register(
+        UserAggregate user = domainService.saveUser(
                 command.username(),
                 command.password(),
                 command.email(),
@@ -38,7 +38,8 @@ public class UserAuthAppService {
     }
 
     public SaTokenInfo loginByAccount(LoginByAccountCommand command) {
-        UserAggregate user = domainService.login(command.account(), command.password());
+        UserAggregate user = domainService.getUser(command.account());
+        user.matchesPassword(command.password(), "用户名或密码错误");
         StpUtil.login(user.getUserId().value());
         return StpUtil.getTokenInfo();
     }
