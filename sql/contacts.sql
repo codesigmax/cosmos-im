@@ -13,7 +13,7 @@ CREATE TABLE contacts (
   id BIGSERIAL PRIMARY KEY,
   owner_id BIGINT NOT NULL,
   contact_id BIGINT NOT NULL,
-  relation VARCHAR(50) NOT NULL,
+  relation SMALLINT NOT NULL,
   remark_name VARCHAR(255),
   group_id BIGINT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
