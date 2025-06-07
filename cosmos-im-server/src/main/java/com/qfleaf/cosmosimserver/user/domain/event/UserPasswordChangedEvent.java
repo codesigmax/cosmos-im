@@ -1,14 +1,15 @@
 package com.qfleaf.cosmosimserver.user.domain.event;
 
-import com.qfleaf.cosmosimserver.core.domain.base.BaseDomainEvent;
-import com.qfleaf.cosmosimserver.user.domain.valueobjects.UserId;
+import com.qfleaf.cosmosimserver.user.domain.aggregates.UserAggregate;
 import lombok.Getter;
+import org.springframework.context.ApplicationEvent;
 
 @Getter
-public class UserPasswordChangedEvent extends BaseDomainEvent {
-    private final Long userId;
+public class UserPasswordChangedEvent extends ApplicationEvent {
+    private final UserAggregate user;
 
-    public UserPasswordChangedEvent(UserId userId) {
-        this.userId = userId.value();
+    public UserPasswordChangedEvent(UserAggregate user) {
+        super(user);
+        this.user = user;
     }
 }

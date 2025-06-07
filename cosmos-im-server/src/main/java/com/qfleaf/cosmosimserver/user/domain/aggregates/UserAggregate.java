@@ -64,13 +64,13 @@ public class UserAggregate extends BaseAggregateRoot {
     public void changePassword(String original, String newPassword) {
         matchesPassword(original, "原密码不匹配");
         this.password = new EncryptedPassword(passwordEncoder.encode(newPassword));
-        registerEvent(new UserPasswordChangedEvent(userId));
+//        registerEvent(new UserPasswordChangedEvent(userId));
     }
 
     public void updateProfile(String nickname, String avatarUrl) {
         this.nickname = nickname;
         this.avatarUrl = avatarUrl;
-        registerEvent(new UserProfileUpdatedEvent(userId));
+//        registerEvent(new UserProfileUpdatedEvent(userId));
     }
 
     // 工厂方法
@@ -92,7 +92,7 @@ public class UserAggregate extends BaseAggregateRoot {
         user.createdAt = Instant.now();
 
         // 注册领域事件
-        user.registerEvent(new UserRegisteredEvent(user.getUserId().value(), user.getUsername().value()));
+//        user.registerEvent(new UserRegisteredEvent(user.getUserId().value(), user.getUsername().value()));
         return user;
     }
 

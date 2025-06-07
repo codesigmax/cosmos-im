@@ -1,15 +1,15 @@
 package com.qfleaf.cosmosimserver.user.domain.event;
 
-import com.qfleaf.cosmosimserver.core.domain.base.BaseDomainEvent;
+import com.qfleaf.cosmosimserver.user.domain.aggregates.UserAggregate;
 import lombok.Getter;
+import org.springframework.context.ApplicationEvent;
 
 @Getter
-public class UserRegisteredEvent extends BaseDomainEvent {
-    private final Long userId;
-    private final String username;
+public class UserRegisteredEvent extends ApplicationEvent {
+    private final UserAggregate user;
 
-    public UserRegisteredEvent(Long userId, String username) {
-        this.userId = userId;
-        this.username = username;
+    public UserRegisteredEvent(UserAggregate user) {
+        super(user);
+        this.user = user;
     }
 }
