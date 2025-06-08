@@ -6,6 +6,8 @@ import com.qfleaf.cosmosimserver.contact.domain.events.ContactCreateEvent;
 import com.qfleaf.cosmosimserver.contact.infrastructure.cache.ContactCacheRepository;
 import com.qfleaf.cosmosimserver.contact.infrastructure.dto.AddContactEventDTO;
 import com.qfleaf.cosmosimserver.contact.interfaces.ws.cache.ContactNotificationSessionCache;
+import com.qfleaf.cosmosimserver.shared.exception.ErrorCode;
+import com.qfleaf.cosmosimserver.shared.exception.SystemException;
 import com.qfleaf.cosmosimserver.shared.ws.WsMessage;
 import jakarta.annotation.Nonnull;
 import jakarta.websocket.Session;
@@ -70,8 +72,22 @@ public class ContactCreateEventListener
                 for (WsMessage<?> msg : messages) {
                     try {
                         session.getBasicRemote().sendText(objectMapper.writeValueAsString(msg));
+                    } catch (JsonProcessingException e) {
+                        log.error("JsonProcessing异常 {}", e.getMessage());
+                        throw new SystemException(
+                                ErrorCode.INTERNAL_ERROR,
+                                "Jackson",
+                                "处理JSON数据失败: " + e.getMessage(),
+                                e
+                        );
                     } catch (IOException e) {
-                        log.error("IO异常 {}", e.getMessage(), e);
+                        log.error("IO异常 {}", e.getMessage());
+                        throw new SystemException(
+                                ErrorCode.MESSAGE_REJECTED,
+                                "WebSocket",
+                                "消息发送失败: " + e.getMessage(),
+                                e
+                        );
                     }
                 }
                 // 清空该用户的离线消息
