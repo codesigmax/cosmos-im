@@ -9,6 +9,8 @@ public interface UserRepository {
 
     void checkUsername(String username);
 
+    void checkEmail(String email);
+
     UserAggregate findUserById(Long userId);
 
     UserAggregate save(UserAggregate user);

@@ -22,4 +22,11 @@ public interface UserReadRepository {
             where username = #{account}
             """)
     Optional<UserEntity> findUserByAccount(@Param("account") String account);
+
+    @Select("""
+            select *
+            from users
+            where email = #{email}
+            """)
+    Optional<UserEntity> findUserByEmail(@Param("email") String email);
 }

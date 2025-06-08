@@ -33,8 +33,6 @@ public class UserRepositoryImpl implements UserRepository {
         UserEntity entity = user.toEntity();
         int insert = writeRepo.insert(entity);
         log.info("insert user entity: {}, effect rows: {} ", entity, insert);
-        // todo 记录日志
-        // todo 发布事件
         return user;
     }
 
@@ -49,6 +47,13 @@ public class UserRepositoryImpl implements UserRepository {
     public void checkUsername(String username) {
         readRepo.findUserByAccount(username).ifPresent(user -> {
             throw new InvalidArgsException("用户名不可用：" + username);
+        });
+    }
+
+    @Override
+    public void checkEmail(String email) {
+        readRepo.findUserByEmail(email).ifPresent(user -> {
+            throw new InvalidArgsException("邮箱不可用" + email);
         });
     }
 
