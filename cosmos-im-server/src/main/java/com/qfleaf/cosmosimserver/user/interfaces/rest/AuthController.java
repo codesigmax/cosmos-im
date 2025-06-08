@@ -8,6 +8,8 @@ import com.qfleaf.cosmosimserver.user.application.services.UserAuthService;
 import com.qfleaf.cosmosimserver.user.interfaces.rest.request.LoginRequest;
 import com.qfleaf.cosmosimserver.user.interfaces.rest.request.RegisterRequest;
 import com.qfleaf.cosmosimserver.user.interfaces.rest.response.LoginResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,9 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auths")
 @Validated
 @RequiredArgsConstructor
+@Tag(name = "认证接口")
 public class AuthController {
     private final UserAuthService authService;
 
+    @Operation(summary = "注册")
     @PostMapping("/register")
     public ApiResponse<Void> register(@RequestBody RegisterRequest request) {
         authService.registerByAccount(
@@ -36,6 +40,7 @@ public class AuthController {
         return ApiResponse.success();
     }
 
+    @Operation(summary = "登陆")
     @PostMapping("/login")
     public ApiResponse<LoginResponse> login(@RequestBody LoginRequest request) {
         SaTokenInfo saTokenInfo = authService.loginByAccount(
