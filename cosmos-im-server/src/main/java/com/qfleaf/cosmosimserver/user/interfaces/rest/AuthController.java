@@ -1,6 +1,8 @@
 package com.qfleaf.cosmosimserver.user.interfaces.rest;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
 import com.qfleaf.cosmosimserver.shared.web.ApiResponse;
 import com.qfleaf.cosmosimserver.user.application.commands.LoginByAccountCommand;
 import com.qfleaf.cosmosimserver.user.application.commands.RegisterByAccountCommand;
@@ -55,5 +57,13 @@ public class AuthController {
                         .tokenValue(saTokenInfo.getTokenValue())
                         .build()
         );
+    }
+
+    @Operation(summary = "登出")
+    @SaCheckLogin
+    @PostMapping("/logout")
+    public ApiResponse<Void> logout() {
+        StpUtil.logout();
+        return ApiResponse.success();
     }
 }
