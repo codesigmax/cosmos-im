@@ -2,7 +2,7 @@ package com.qfleaf.cosmosimserver.user.infrastructure.persistence;
 
 import com.qfleaf.cosmosimserver.user.domain.aggregates.UserAggregate;
 import com.qfleaf.cosmosimserver.user.domain.entities.UserEntity;
-import com.qfleaf.cosmosimserver.user.domain.exceptions.InvalidArgsException;
+import com.qfleaf.cosmosimserver.shared.exception.InvalidArgsException;
 import com.qfleaf.cosmosimserver.user.domain.exceptions.UserNotFoundException;
 import com.qfleaf.cosmosimserver.user.domain.repositories.UserReadRepository;
 import com.qfleaf.cosmosimserver.user.domain.repositories.UserRepository;

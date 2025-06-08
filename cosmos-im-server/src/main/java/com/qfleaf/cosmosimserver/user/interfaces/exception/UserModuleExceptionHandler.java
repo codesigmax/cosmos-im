@@ -2,7 +2,7 @@ package com.qfleaf.cosmosimserver.user.interfaces.exception;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import com.qfleaf.cosmosimserver.shared.web.ApiResponse;
-import com.qfleaf.cosmosimserver.user.domain.exceptions.InvalidArgsException;
+import com.qfleaf.cosmosimserver.shared.exception.InvalidArgsException;
 import com.qfleaf.cosmosimserver.user.domain.exceptions.PasswordMismatchException;
 import com.qfleaf.cosmosimserver.user.domain.exceptions.UserNotFoundException;
 import com.qfleaf.cosmosimserver.user.domain.exceptions.VerificationCodeMismatchException;
