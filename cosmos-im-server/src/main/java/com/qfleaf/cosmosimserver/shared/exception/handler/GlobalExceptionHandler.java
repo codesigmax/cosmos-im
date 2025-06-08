@@ -1,14 +1,28 @@
 package com.qfleaf.cosmosimserver.shared.exception.handler;
 
 import com.qfleaf.cosmosimserver.shared.exception.InvalidArgsException;
+import com.qfleaf.cosmosimserver.shared.exception.SystemException;
 import com.qfleaf.cosmosimserver.shared.web.ApiResponse;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
+
 @Slf4j
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
+    private final HttpServletResponse httpServletResponse;
+
+    @ExceptionHandler(SystemException.class)
+    public ApiResponse<Void> handleSystemException(SystemException e) throws IOException {
+        log.error(e.getFingerprint(), e.getMessage());
+        httpServletResponse.sendError(500);
+        return ApiResponse.failure(null, "服务器内部错误");
+    }
 
     @ExceptionHandler(InvalidArgsException.class)
     public ApiResponse<Void> handleInvalidArgsException(InvalidArgsException e) {
