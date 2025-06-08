@@ -1,9 +1,9 @@
 package com.qfleaf.cosmosimserver.contact.domain.repositories;
 
 import com.qfleaf.cosmosimserver.contact.domain.entities.ContactGroup;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 @Mapper
 public interface ContactGroupRepository {
@@ -13,4 +13,11 @@ public interface ContactGroupRepository {
             """)
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int insert(ContactGroup contactGroup);
+
+    @Select("""
+            select *
+            from contact_groups
+            where owner_id = #{userId}
+            """)
+    List<ContactGroup> selectAllByOwnerId(@Param("userId") Long userId);
 }
