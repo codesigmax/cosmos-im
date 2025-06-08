@@ -8,12 +8,8 @@ public class EncryptedPassword {
     private final String value;
 
     public EncryptedPassword(String encryptedValue) {
-        // todo fix校验逻辑错误
         if (!StringUtils.hasText(encryptedValue)) {
             throw new IllegalArgumentException("密码不能为空");
-        }
-        if (encryptedValue.length() < 8) {
-            throw new IllegalArgumentException("密码长度至少为8位");
         }
         this.value = encryptedValue;
     }
