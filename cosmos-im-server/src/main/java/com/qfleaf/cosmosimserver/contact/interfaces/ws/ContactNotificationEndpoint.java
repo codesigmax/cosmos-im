@@ -35,6 +35,6 @@ public class ContactNotificationEndpoint {
     @OnMessage
     public void onMessage(String message, Session session) {
         log.debug("接到消息 {}", message);
-        session.getAsyncRemote().sendText(message);
+        session.getAsyncRemote().sendText("已送达");
     }
 }
