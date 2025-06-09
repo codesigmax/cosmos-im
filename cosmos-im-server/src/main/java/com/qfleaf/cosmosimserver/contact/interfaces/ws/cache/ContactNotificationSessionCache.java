@@ -19,4 +19,8 @@ public class ContactNotificationSessionCache {
     public Session getSession(Long uid) {
         return sessionCache.get(uid);
     }
+
+    public void removeSession(Long uid) {
+        sessionCache.remove(uid);
+    }
 }

@@ -26,6 +26,9 @@ public class ContactNotificationEndpoint {
 
     @OnClose
     public void onClose(Session session) {
+        Long uid = Long.valueOf(session.getPathParameters().get("uid"));
+        ContactNotificationSessionCache sessionCache = SpringContextHolder.getBean(ContactNotificationSessionCache.class);
+        sessionCache.removeSession(uid);
         log.info("会话关闭 {}", session.getId());
     }
 
