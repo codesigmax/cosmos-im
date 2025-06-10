@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/users")
@@ -49,6 +50,13 @@ public class UserController {
         );
         return ApiResponse.success();
     }
+
+    // 头像上传
+    @Operation(summary = "上传自定义头像")
+    @PostMapping("/avatar")
+    public ApiResponse<String> uploadAvatar(@RequestParam("file") MultipartFile file) {
+        String url = opsService.uploadAvatar(file);
+        return ApiResponse.success(url);
+    }
     // todo 修改个人信息
-    // todo 头像上传
 }
