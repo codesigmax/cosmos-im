@@ -4,9 +4,11 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
 import com.qfleaf.cosmosimserver.shared.web.ApiResponse;
 import com.qfleaf.cosmosimserver.user.application.commands.ChangePasswordCommand;
+import com.qfleaf.cosmosimserver.user.application.commands.ModifyProfileCommand;
 import com.qfleaf.cosmosimserver.user.application.queries.UserQueryService;
 import com.qfleaf.cosmosimserver.user.application.services.UserOpsService;
 import com.qfleaf.cosmosimserver.user.infrastructure.dto.UserDetailDTO;
+import com.qfleaf.cosmosimserver.user.interfaces.rest.request.EditProfileRequest;
 import com.qfleaf.cosmosimserver.user.interfaces.rest.request.PasswordChangeRequest;
 import com.qfleaf.cosmosimserver.user.interfaces.rest.response.UserDetailResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -54,9 +56,23 @@ public class UserController {
     // 头像上传
     @Operation(summary = "上传自定义头像")
     @PostMapping("/avatar")
+    @SaCheckLogin
     public ApiResponse<String> uploadAvatar(@RequestParam("file") MultipartFile file) {
         String url = opsService.uploadAvatar(file);
         return ApiResponse.success(url);
     }
-    // todo 修改个人信息
+
+    // 修改个人信息
+    @Operation(summary = "修改个人信息")
+    @PostMapping("/profile")
+    @SaCheckLogin
+    public ApiResponse<Void> modifyProfile(@RequestBody EditProfileRequest request) {
+        opsService.modifyProfile(
+                new ModifyProfileCommand(
+                        request.getAvatar(),
+                        request.getNickname()
+                )
+        );
+        return ApiResponse.success();
+    }
 }

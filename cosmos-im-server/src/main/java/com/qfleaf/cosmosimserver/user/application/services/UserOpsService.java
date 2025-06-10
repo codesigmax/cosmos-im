@@ -4,6 +4,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.qfleaf.cosmosimserver.shared.exception.ErrorCode;
 import com.qfleaf.cosmosimserver.shared.exception.SystemException;
 import com.qfleaf.cosmosimserver.user.application.commands.ChangePasswordCommand;
+import com.qfleaf.cosmosimserver.user.application.commands.ModifyProfileCommand;
 import com.qfleaf.cosmosimserver.user.domain.aggregates.UserAggregate;
 import com.qfleaf.cosmosimserver.user.domain.services.UserDomainService;
 import com.qfleaf.cosmosimserver.user.infrastructure.external.FileClient;
@@ -30,5 +31,15 @@ public class UserOpsService {
         } catch (Exception e) {
             throw new SystemException(ErrorCode.INTERNAL_ERROR, "MinIO", "上传文件", e);
         }
+    }
+
+    public void modifyProfile(ModifyProfileCommand command) {
+        UserAggregate user = domainService.getUser(StpUtil.getLoginIdAsLong());
+        user.updateProfile(
+                command.nickname(),
+                command.avatarUrl()
+        );
+
+        domainService.saveUser(user);
     }
 }
