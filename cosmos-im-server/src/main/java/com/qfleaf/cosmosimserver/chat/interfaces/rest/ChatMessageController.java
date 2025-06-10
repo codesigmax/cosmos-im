@@ -36,7 +36,7 @@ public class ChatMessageController {
     @Operation(summary = "发送消息")
     @PostMapping("/send")
     @SaCheckLogin
-    public void send(@RequestBody SendMessageRequest request) {
+    public ApiResponse<Void> send(@RequestBody SendMessageRequest request) {
         chatOpsService.sendMessage(
                 new SendMessageCommand(
                         StpUtil.getLoginIdAsLong(),
@@ -44,5 +44,6 @@ public class ChatMessageController {
                         request.getContent()
                 )
         );
+        return ApiResponse.success();
     }
 }
