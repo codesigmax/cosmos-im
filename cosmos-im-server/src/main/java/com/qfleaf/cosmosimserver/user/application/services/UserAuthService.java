@@ -6,6 +6,7 @@ import com.qfleaf.cosmosimserver.user.application.commands.LoginByAccountCommand
 import com.qfleaf.cosmosimserver.user.application.commands.RegisterByAccountCommand;
 import com.qfleaf.cosmosimserver.user.domain.aggregates.UserAggregate;
 import com.qfleaf.cosmosimserver.user.domain.services.UserDomainService;
+import com.qfleaf.cosmosimserver.user.infrastructure.external.EmailClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,16 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserAuthService {
     private final UserDomainService domainService;
-//    private final EmailClient emailClient; todo集成邮箱
+    private final EmailClient emailClient;
 
     @Transactional
     public void registerByAccount(RegisterByAccountCommand command) {
-        // 1. 校验验证码
-//        if (!emailClient.verifyCode(command.email(), command.verificationCode())) {
-//            throw new VerificationCodeMismatchException();
-//        }
 
-        // 2. 执行领域逻辑
+        // 执行领域逻辑
         UserAggregate user = domainService.saveUser(
                 command.username(),
                 command.password(),
@@ -33,8 +30,11 @@ public class UserAuthService {
                 command.nickname(),
                 command.avatar()
         );
-        // 3. 记录日志
+        // 记录日志
         log.info("user register by account: {}", user);
+
+        // 发送欢迎邮件
+        emailClient.sendWelcomeEmail(command.email());
     }
 
     public SaTokenInfo loginByAccount(LoginByAccountCommand command) {
