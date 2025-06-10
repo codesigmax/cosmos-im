@@ -19,9 +19,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SystemException.class)
     public ApiResponse<Void> handleSystemException(SystemException e) throws IOException {
-        log.error(e.getFingerprint(), e.getMessage());
-        httpServletResponse.sendError(500);
-        return ApiResponse.failure(null, "服务器内部错误");
+//        log.error(e.getFingerprint(), e.getMessage(), e);
+        log.error("\n系统异常:\n {}", e.generateTechReport());
+        httpServletResponse.setStatus(500);
+        return ApiResponse.failure(e.getErrorCode(), "服务器内部错误");
     }
 
     @ExceptionHandler(InvalidArgsException.class)
