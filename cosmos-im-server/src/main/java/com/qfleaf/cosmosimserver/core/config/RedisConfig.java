@@ -2,6 +2,7 @@ package com.qfleaf.cosmosimserver.core.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.qfleaf.cosmosimserver.chat.domain.events.listener.ChatMessageSendEventListener;
 import com.qfleaf.cosmosimserver.contact.domain.events.listener.ContactCreateEventListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,10 +46,12 @@ public class RedisConfig {
 
     @Bean
     public RedisMessageListenerContainer redisContainer(RedisConnectionFactory factory,
-                                                        ContactCreateEventListener listener) {
+                                                        ContactCreateEventListener contactCreateEventListener,
+                                                        ChatMessageSendEventListener chatMessageSendEventListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(factory);
-        container.addMessageListener(listener, new PatternTopic("user_online_channel"));
+        container.addMessageListener(contactCreateEventListener, new PatternTopic("user_online_channel"));
+        container.addMessageListener(chatMessageSendEventListener, new PatternTopic("user_chat_channel"));
         return container;
     }
 }
