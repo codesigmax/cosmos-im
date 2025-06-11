@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 
 @Aspect
 @Component
+@Order(Integer.MIN_VALUE)
 public class GlobalLogAspect {
     
     private static final Logger logger = LoggerFactory.getLogger(GlobalLogAspect.class);
