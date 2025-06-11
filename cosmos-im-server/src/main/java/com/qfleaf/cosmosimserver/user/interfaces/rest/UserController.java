@@ -2,6 +2,7 @@ package com.qfleaf.cosmosimserver.user.interfaces.rest;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
+import com.qfleaf.cosmosimserver.log.annotations.Log;
 import com.qfleaf.cosmosimserver.shared.web.ApiResponse;
 import com.qfleaf.cosmosimserver.user.application.commands.ChangePasswordCommand;
 import com.qfleaf.cosmosimserver.user.application.commands.ModifyProfileCommand;
@@ -44,6 +45,7 @@ public class UserController {
         return ApiResponse.success(userDetail.toVO());
     }
 
+    @Log(opsName = "用户修改密码")
     @Operation(summary = "修改密码")
     @PostMapping("/changePassword")
     public ApiResponse<Void> changePassword(@RequestBody PasswordChangeRequest request) {

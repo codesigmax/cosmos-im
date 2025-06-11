@@ -3,6 +3,7 @@ package com.qfleaf.cosmosimserver.user.interfaces.rest;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
+import com.qfleaf.cosmosimserver.log.annotations.Log;
 import com.qfleaf.cosmosimserver.shared.web.ApiResponse;
 import com.qfleaf.cosmosimserver.user.application.commands.LoginByAccountCommand;
 import com.qfleaf.cosmosimserver.user.application.commands.RegisterByAccountCommand;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final UserAuthService authService;
 
+    @Log(opsName = "用户注册")
     @Operation(summary = "注册")
     @PostMapping("/register")
     public ApiResponse<Void> register(@RequestBody RegisterRequest request) {
@@ -42,6 +44,7 @@ public class AuthController {
         return ApiResponse.success();
     }
 
+    @Log(opsName = "用户登陆")
     @Operation(summary = "登陆")
     @PostMapping("/login")
     public ApiResponse<LoginResponse> login(@RequestBody LoginRequest request) {
@@ -59,6 +62,7 @@ public class AuthController {
         );
     }
 
+    @Log(opsName = "用户登出")
     @Operation(summary = "登出")
     @SaCheckLogin
     @PostMapping("/logout")
